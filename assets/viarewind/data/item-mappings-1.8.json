@@ -1,0 +1,346 @@
+{
+  "items": {
+    "182": {
+      "id": "44",
+      "data": "1",
+      "name": "1.8 Red Sandstone Slab"
+    },
+    "409": {
+      "id": "406",
+      "name": "1.8 Prismarine Shard"
+    },
+    "410": {
+      "id": "406",
+      "name": "1.8 Prismarine Crystal"
+    },
+    "411": {
+      "id": "365",
+      "name": "1.8 Raw Rabbit"
+    },
+    "412": {
+      "id": "366",
+      "name": "1.8 Cooked Rabbit"
+    },
+    "413": {
+      "id": "282",
+      "name": "1.8 Rabbit Stew"
+    },
+    "414": {
+      "id": "375",
+      "name": "1.8 Rabbit's Foot"
+    },
+    "415": {
+      "id": "334",
+      "name": "1.8 Rabbit Hide"
+    },
+    "416": {
+      "id": "280",
+      "name": "1.8 Armor Stand"
+    },
+    "423": {
+      "id": "363",
+      "name": "1.8 Raw Mutton"
+    },
+    "424": {
+      "id": "364",
+      "name": "1.8 Cooked Mutton"
+    },
+    "425": {
+      "id": "323",
+      "name": "1.8 Banner"
+    },
+    "373:8203": {
+      "id": "373",
+      "data": "0",
+      "name": "1.8 Potion of Leaping"
+    },
+    "373:8235": {
+      "id": "373",
+      "data": "0",
+      "name": "1.8 Potion of Leaping"
+    },
+    "373:8267": {
+      "id": "373",
+      "data": "0",
+      "name": "1.8 Potion of Leaping"
+    },
+    "373:16395": {
+      "id": "373",
+      "data": "0",
+      "name": "1.8 Splash Potion of Leaping"
+    },
+    "373:16427": {
+      "id": "373",
+      "data": "0",
+      "name": "1.8 Splash Potion of Leaping"
+    },
+    "373:16459": {
+      "id": "373",
+      "data": "0",
+      "name": "1.8 Splash Potion of Leaping"
+    },
+    "383:30": {
+      "id": "383",
+      "name": "1.8 Spawn ArmorStand"
+    },
+    "383:67": {
+      "id": "383",
+      "name": "1.8 Spawn Endermite"
+    },
+    "383:68": {
+      "id": "383",
+      "name": "1.8 Spawn Guardian"
+    },
+    "383:101": {
+      "id": "383",
+      "name": "1.8 Spawn Rabbit"
+    },
+    "19:1": {
+      "id": "19",
+      "data": "0",
+      "name": "1.8 Wet Sponge"
+    }
+  },
+  "block-items": {
+    "157": {
+      "id": "28",
+      "name": "1.8 Activator Rail"
+    },
+    "165": {
+      "id": "95",
+      "data": "5",
+      "name": "1.8 Slime Block"
+    },
+    "166": {
+      "id": "20",
+      "name": "1.8 Barrier"
+    },
+    "167": {
+      "id": "96",
+      "data": "-1",
+      "name": "1.8 Iron Trapdoor"
+    },
+    "169": {
+      "id": "89",
+      "name": "1.8 Sea Lantern"
+    },
+    "180": {
+      "id": "128",
+      "name": "1.8 Red Sandstone Stairs"
+    },
+    "181": {
+      "id": "43",
+      "data": "1",
+      "name": "1.8 Double Red Sandstone Slab"
+    },
+    "183": {
+      "id": "107",
+      "data": "-1",
+      "name": "1.8 Spruce Fence Gate"
+    },
+    "184": {
+      "id": "107",
+      "data": "-1",
+      "name": "1.8 Birch Fence Gate"
+    },
+    "185": {
+      "id": "107",
+      "data": "-1",
+      "name": "1.8 Jungle Fence Gate"
+    },
+    "186": {
+      "id": "107",
+      "data": "-1",
+      "name": "1.8 Dark Oak Fence Gate"
+    },
+    "187": {
+      "id": "107",
+      "data": "-1",
+      "name": "1.8 Acacia Fence Gate"
+    },
+    "188": {
+      "id": "85",
+      "data": "-1",
+      "name": "1.8 Spruce Fence"
+    },
+    "189": {
+      "id": "85",
+      "data": "-1",
+      "name": "1.8 Birch Fence"
+    },
+    "190": {
+      "id": "85",
+      "data": "-1",
+      "name": "1.8 Jungle Fence"
+    },
+    "191": {
+      "id": "85",
+      "data": "-1",
+      "name": "1.8 Dark Oak Fence"
+    },
+    "192": {
+      "id": "85",
+      "data": "-1",
+      "name": "1.8 Acacia Fence"
+    },
+    "427": {
+      "id": "324",
+      "data": "-1",
+      "name": "1.8 Spruce Door"
+    },
+    "428": {
+      "id": "324",
+      "data": "-1",
+      "name": "1.8 Birch Door"
+    },
+    "429": {
+      "id": "324",
+      "data": "-1",
+      "name": "1.8 Jungle Door"
+    },
+    "430": {
+      "id": "324",
+      "data": "-1",
+      "name": "1.8 Acacia Door"
+    },
+    "431": {
+      "id": "324",
+      "data": "-1",
+      "name": "1.8 Dark Oak Door"
+    },
+    "1:1": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Granite"
+    },
+    "1:2": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Polished Granite"
+    },
+    "1:3": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Diorite"
+    },
+    "1:4": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Polished Diorite"
+    },
+    "1:5": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Andesite"
+    },
+    "1:6": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Polished Andesite"
+    },
+    "168:0": {
+      "id": "1",
+      "data": "0",
+      "name": "1.8 Prismarine"
+    },
+    "168:1": {
+      "id": "98",
+      "data": "0",
+      "name": "1.8 Prismarine Bricks"
+    },
+    "168:2": {
+      "id": "98",
+      "data": "1",
+      "name": "1.8 Dark Prismarine"
+    },
+    "179:0": {
+      "id": "24",
+      "data": "-1",
+      "name": "1.8 Red Sandstone"
+    },
+    "179:1": {
+      "id": "24",
+      "data": "-1",
+      "name": "1.8 Chiseled Red Sandstone"
+    },
+    "179:2": {
+      "id": "24",
+      "data": "-1",
+      "name": "1.8 Smooth Sandstone"
+    }
+  },
+  "blocks": {
+    "176": {
+      "id": "63",
+      "data": "-1"
+    },
+    "177": {
+      "id": "68",
+      "data": "-1"
+    },
+    "193": {
+      "id": "64",
+      "data": "-1"
+    },
+    "194": {
+      "id": "64",
+      "data": "-1"
+    },
+    "195": {
+      "id": "64",
+      "data": "-1"
+    },
+    "196": {
+      "id": "64",
+      "data": "-1"
+    },
+    "197": {
+      "id": "64",
+      "data": "-1"
+    },
+    "77:5": {
+      "id": "69",
+      "data": "6"
+    },
+    "77:13": {
+      "id": "69",
+      "data": "14"
+    },
+    "77:0": {
+      "id": "69",
+      "data": "0"
+    },
+    "77:8": {
+      "id": "69",
+      "data": "8"
+    },
+    "143:5": {
+      "id": "69",
+      "data": "6"
+    },
+    "143:13": {
+      "id": "69",
+      "data": "14"
+    },
+    "143:0": {
+      "id": "69",
+      "data": "0"
+    },
+    "143:8": {
+      "id": "69",
+      "data": "8"
+    },
+    "178": {
+      "id": "151",
+      "data": "-1"
+    },
+    "182:0": {
+      "id": "44",
+      "data": "1"
+    },
+    "182:8": {
+      "id": "44",
+      "data": "9"
+    }
+  }
+}

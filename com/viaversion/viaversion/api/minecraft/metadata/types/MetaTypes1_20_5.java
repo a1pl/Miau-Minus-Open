@@ -1,0 +1,48 @@
+package com.viaversion.viaversion.api.minecraft.metadata.types;
+
+import com.viaversion.viaversion.api.minecraft.Particle;
+import com.viaversion.viaversion.api.minecraft.metadata.MetaType;
+import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.api.type.types.ArrayType;
+import com.viaversion.viaversion.api.type.types.misc.ParticleType;
+import com.viaversion.viaversion.api.type.types.version.Types1_20_5;
+
+public final class MetaTypes1_20_5 extends AbstractMetaTypes {
+    public final MetaType byteType = this.add(0, Type.BYTE);
+    public final MetaType varIntType = this.add(1, Type.VAR_INT);
+    public final MetaType longType = this.add(2, Type.VAR_LONG);
+    public final MetaType floatType = this.add(3, Type.FLOAT);
+    public final MetaType stringType = this.add(4, Type.STRING);
+    public final MetaType componentType = this.add(5, Type.TAG);
+    public final MetaType optionalComponentType = this.add(6, Type.OPTIONAL_TAG);
+    public final MetaType itemType = this.add(7, Types1_20_5.ITEM);
+    public final MetaType booleanType = this.add(8, Type.BOOLEAN);
+    public final MetaType rotationType = this.add(9, Type.ROTATION);
+    public final MetaType positionType = this.add(10, Type.POSITION1_14);
+    public final MetaType optionalPositionType = this.add(11, Type.OPTIONAL_POSITION_1_14);
+    public final MetaType directionType = this.add(12, Type.VAR_INT);
+    public final MetaType optionalUUIDType = this.add(13, Type.OPTIONAL_UUID);
+    public final MetaType blockStateType = this.add(14, Type.VAR_INT);
+    public final MetaType optionalBlockStateType = this.add(15, Type.VAR_INT);
+    public final MetaType nbtType = this.add(16, Type.COMPOUND_TAG);
+    public final MetaType particleType;
+    public final MetaType particlesType;
+    public final MetaType villagerDatatType = this.add(19, Type.VILLAGER_DATA);
+    public final MetaType optionalVarIntType = this.add(20, Type.OPTIONAL_VAR_INT);
+    public final MetaType poseType = this.add(21, Type.VAR_INT);
+    public final MetaType catVariantType = this.add(22, Type.VAR_INT);
+    public final MetaType wolfVariantType = this.add(23, Type.VAR_INT);
+    public final MetaType frogVariantType = this.add(24, Type.VAR_INT);
+    public final MetaType optionalGlobalPosition = this.add(25, Type.OPTIONAL_GLOBAL_POSITION);
+    public final MetaType paintingVariantType = this.add(26, Type.VAR_INT);
+    public final MetaType snifferState = this.add(27, Type.VAR_INT);
+    public final MetaType armadilloState = this.add(28, Type.VAR_INT);
+    public final MetaType vectorType = this.add(29, Type.VECTOR3F);
+    public final MetaType quaternionType = this.add(30, Type.QUATERNION);
+
+    public MetaTypes1_20_5(ParticleType particleType, ArrayType<Particle> particlesType) {
+        super(31);
+        this.particleType = this.add(17, particleType);
+        this.particlesType = this.add(18, particlesType);
+    }
+}

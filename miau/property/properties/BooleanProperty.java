@@ -1,0 +1,47 @@
+package miau.property.properties;
+
+import com.google.gson.JsonObject;
+import java.util.function.BooleanSupplier;
+import miau.property.Property;
+
+public class BooleanProperty extends Property<Boolean> {
+    public BooleanProperty(String name, Boolean value) {
+        this(name, value, null);
+    }
+
+    public BooleanProperty(String name, Boolean value, BooleanSupplier booleanSupplier) {
+        super(name, value, booleanSupplier);
+    }
+
+    @Override
+    public String getValuePrompt() {
+        return "true/false";
+    }
+
+    @Override
+    public String formatValue() {
+        return this.getValue() ? "&atrue" : "&cfalse";
+    }
+
+    @Override
+    public boolean parseString(String string) {
+        if (string == null) {
+            return this.setValue(!this.getValue());
+        } else {
+            return !string.equalsIgnoreCase("true") && !string.equalsIgnoreCase("on") && !string.equalsIgnoreCase("1")
+                ? (string.equalsIgnoreCase("false") || string.equalsIgnoreCase("off") || string.equalsIgnoreCase("0"))
+                    && this.setValue(false)
+                : this.setValue(true);
+        }
+    }
+
+    @Override
+    public boolean read(JsonObject jsonObject) {
+        return this.setValue(jsonObject.get(this.getName()).getAsBoolean());
+    }
+
+    @Override
+    public void write(JsonObject jsonObject) {
+        jsonObject.addProperty(this.getName(), this.getValue());
+    }
+}

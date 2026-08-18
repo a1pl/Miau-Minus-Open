@@ -1,0 +1,332 @@
+package com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3;
+
+import com.viaversion.viaversion.api.connection.UserConnection;
+import com.viaversion.viaversion.api.minecraft.ProfileKey;
+import com.viaversion.viaversion.api.minecraft.RegistryType;
+import com.viaversion.viaversion.api.minecraft.data.StructuredDataKey;
+import com.viaversion.viaversion.api.minecraft.entities.EntityTypes1_20_5;
+import com.viaversion.viaversion.api.protocol.AbstractProtocol;
+import com.viaversion.viaversion.api.protocol.packet.PacketWrapper;
+import com.viaversion.viaversion.api.protocol.packet.State;
+import com.viaversion.viaversion.api.protocol.packet.provider.PacketTypesProvider;
+import com.viaversion.viaversion.api.protocol.packet.provider.SimplePacketTypesProvider;
+import com.viaversion.viaversion.api.type.Type;
+import com.viaversion.viaversion.api.type.types.misc.ParticleType;
+import com.viaversion.viaversion.api.type.types.version.Types1_20_5;
+import com.viaversion.viaversion.data.entity.EntityTrackerBase;
+import com.viaversion.viaversion.protocols.base.ClientboundLoginPackets;
+import com.viaversion.viaversion.protocols.base.ServerboundLoginPackets;
+import com.viaversion.viaversion.protocols.protocol1_19_4to1_19_3.rewriter.CommandRewriter1_19_4;
+import com.viaversion.viaversion.protocols.protocol1_20_2to1_20.packet.ServerboundConfigurationPackets1_20_2;
+import com.viaversion.viaversion.protocols.protocol1_20_3to1_20_2.packet.ClientboundConfigurationPackets1_20_3;
+import com.viaversion.viaversion.protocols.protocol1_20_3to1_20_2.packet.ClientboundPacket1_20_3;
+import com.viaversion.viaversion.protocols.protocol1_20_3to1_20_2.packet.ClientboundPackets1_20_3;
+import com.viaversion.viaversion.protocols.protocol1_20_3to1_20_2.packet.ServerboundPacket1_20_3;
+import com.viaversion.viaversion.protocols.protocol1_20_3to1_20_2.packet.ServerboundPackets1_20_3;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.data.MappingData;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.packet.ClientboundConfigurationPackets1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.packet.ClientboundPacket1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.packet.ClientboundPackets1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.packet.ServerboundConfigurationPackets1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.packet.ServerboundPacket1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.packet.ServerboundPackets1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.rewriter.BlockItemPacketRewriter1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.rewriter.ComponentRewriter1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.rewriter.EntityPacketRewriter1_20_5;
+import com.viaversion.viaversion.protocols.protocol1_20_5to1_20_3.storage.AcknowledgedMessagesStorage;
+import com.viaversion.viaversion.rewriter.ComponentRewriter;
+import com.viaversion.viaversion.rewriter.SoundRewriter;
+import com.viaversion.viaversion.rewriter.StatisticsRewriter;
+import com.viaversion.viaversion.rewriter.TagRewriter;
+import com.viaversion.viaversion.util.ProtocolUtil;
+import java.util.UUID;
+
+public final class Protocol1_20_5To1_20_3
+    extends AbstractProtocol<ClientboundPacket1_20_3, ClientboundPacket1_20_5, ServerboundPacket1_20_3, ServerboundPacket1_20_5> {
+    public static final MappingData MAPPINGS = new MappingData();
+    public static boolean strictErrorHandling = System.getProperty("viaversion.strict-error-handling1_20_5", "true")
+        .equalsIgnoreCase("true");
+    private final EntityPacketRewriter1_20_5 entityRewriter = new EntityPacketRewriter1_20_5(this);
+    private final BlockItemPacketRewriter1_20_5 itemRewriter = new BlockItemPacketRewriter1_20_5(this);
+    private final TagRewriter<ClientboundPacket1_20_3> tagRewriter = new TagRewriter<>(this);
+    private final ComponentRewriter<ClientboundPacket1_20_3> componentRewriter = new ComponentRewriter1_20_5(this);
+
+    public Protocol1_20_5To1_20_3() {
+        super(
+            ClientboundPacket1_20_3.class,
+            ClientboundPacket1_20_5.class,
+            ServerboundPacket1_20_3.class,
+            ServerboundPacket1_20_5.class
+        );
+    }
+
+    @Override
+    protected void registerPackets() {
+        super.registerPackets();
+        this.tagRewriter.registerGeneric(ClientboundPackets1_20_3.TAGS);
+        this.tagRewriter.registerGeneric(ClientboundConfigurationPackets1_20_3.UPDATE_TAGS);
+        SoundRewriter<ClientboundPacket1_20_3> soundRewriter = new SoundRewriter<>(this);
+        soundRewriter.register1_19_3Sound(ClientboundPackets1_20_3.SOUND);
+        soundRewriter.register1_19_3Sound(ClientboundPackets1_20_3.ENTITY_SOUND);
+        new StatisticsRewriter<>(this).register(ClientboundPackets1_20_3.STATISTICS);
+        this.componentRewriter.registerComponentPacket(ClientboundPackets1_20_3.SYSTEM_CHAT);
+        this.componentRewriter.registerComponentPacket(ClientboundPackets1_20_3.DISGUISED_CHAT);
+        this.componentRewriter.registerCombatKill1_20(ClientboundPackets1_20_3.COMBAT_KILL);
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.HELLO, wrapper -> {
+            wrapper.passthrough(Type.STRING);
+            wrapper.passthrough(Type.BYTE_ARRAY_PRIMITIVE);
+            wrapper.passthrough(Type.BYTE_ARRAY_PRIMITIVE);
+            wrapper.write(Type.BOOLEAN, true);
+        });
+        this.registerClientbound(ClientboundPackets1_20_3.SERVER_DATA, wrapper -> {
+            wrapper.passthrough(Type.TAG);
+            wrapper.passthrough(Type.OPTIONAL_BYTE_ARRAY_PRIMITIVE);
+            boolean enforcesSecureChat = wrapper.read(Type.BOOLEAN);
+            AcknowledgedMessagesStorage storage = wrapper.user().get(AcknowledgedMessagesStorage.class);
+            storage.setSecureChatEnforced(enforcesSecureChat);
+            if (enforcesSecureChat) {
+                storage.sendQueuedChatSession(wrapper);
+            }
+        });
+        this.registerClientbound(ClientboundPackets1_20_3.PLAYER_CHAT, wrapper -> {
+            wrapper.passthrough(Type.UUID);
+            wrapper.passthrough(Type.VAR_INT);
+            byte[] signature = wrapper.passthrough(Type.OPTIONAL_SIGNATURE_BYTES);
+            if (signature != null) {
+                AcknowledgedMessagesStorage storage = wrapper.user().get(AcknowledgedMessagesStorage.class);
+                if (storage.add(signature) && storage.offset() > 64) {
+                    PacketWrapper chatAck = wrapper.create(ServerboundPackets1_20_3.CHAT_ACK);
+                    chatAck.write(Type.VAR_INT, storage.offset());
+                    chatAck.sendToServer(Protocol1_20_5To1_20_3.class);
+                    storage.clearOffset();
+                }
+            }
+        });
+        this.registerServerbound(ServerboundPackets1_20_5.CHAT_MESSAGE, wrapper -> {
+            wrapper.passthrough(Type.STRING);
+            wrapper.passthrough(Type.LONG);
+            AcknowledgedMessagesStorage storage = wrapper.user().get(AcknowledgedMessagesStorage.class);
+            long salt = wrapper.read(Type.LONG);
+            byte[] signature = wrapper.read(Type.OPTIONAL_SIGNATURE_BYTES);
+            if (storage.isSecureChatEnforced()) {
+                wrapper.write(Type.LONG, salt);
+                wrapper.write(Type.OPTIONAL_SIGNATURE_BYTES, signature);
+            } else {
+                wrapper.write(Type.LONG, 0L);
+                wrapper.write(Type.OPTIONAL_SIGNATURE_BYTES, null);
+            }
+
+            this.replaceChatAck(wrapper, storage);
+        });
+        this.registerServerbound(
+            ServerboundPackets1_20_5.CHAT_COMMAND_SIGNED, ServerboundPackets1_20_3.CHAT_COMMAND, wrapper -> {
+                wrapper.passthrough(Type.STRING);
+                wrapper.passthrough(Type.LONG);
+                AcknowledgedMessagesStorage storage = wrapper.user().get(AcknowledgedMessagesStorage.class);
+                long salt = wrapper.read(Type.LONG);
+                int signatures = wrapper.read(Type.VAR_INT);
+                if (storage.isSecureChatEnforced()) {
+                    wrapper.write(Type.LONG, salt);
+                    wrapper.write(Type.VAR_INT, signatures);
+
+                    for (int i = 0; i < signatures; i++) {
+                        wrapper.passthrough(Type.STRING);
+                        wrapper.passthrough(Type.SIGNATURE_BYTES);
+                    }
+                } else {
+                    wrapper.write(Type.LONG, 0L);
+                    wrapper.write(Type.VAR_INT, 0);
+
+                    for (int i = 0; i < signatures; i++) {
+                        wrapper.read(Type.STRING);
+                        wrapper.read(Type.SIGNATURE_BYTES);
+                    }
+                }
+
+                this.replaceChatAck(wrapper, storage);
+            }
+        );
+        this.registerServerbound(ServerboundPackets1_20_5.CHAT_COMMAND, wrapper -> {
+            wrapper.passthrough(Type.STRING);
+            wrapper.write(Type.LONG, System.currentTimeMillis());
+            wrapper.write(Type.LONG, 0L);
+            wrapper.write(Type.VAR_INT, 0);
+            this.writeChatAck(wrapper, wrapper.user().get(AcknowledgedMessagesStorage.class));
+        });
+        this.registerServerbound(ServerboundPackets1_20_5.CHAT_SESSION_UPDATE, wrapper -> {
+            AcknowledgedMessagesStorage storage = wrapper.user().get(AcknowledgedMessagesStorage.class);
+            if (storage.secureChatEnforced() == null || !storage.secureChatEnforced()) {
+                UUID sessionId = wrapper.read(Type.UUID);
+                ProfileKey profileKey = wrapper.read(Type.PROFILE_KEY);
+                storage.queueChatSession(sessionId, profileKey);
+                wrapper.cancel();
+            }
+        });
+        this.cancelServerbound(ServerboundPackets1_20_5.CHAT_ACK);
+        this.registerClientbound(
+            ClientboundPackets1_20_3.START_CONFIGURATION,
+            wrapper -> wrapper.user().put(new AcknowledgedMessagesStorage())
+        );
+        new CommandRewriter1_19_4<>(this).registerDeclareCommands1_19(ClientboundPackets1_20_3.DECLARE_COMMANDS);
+        this.registerClientbound(State.LOGIN, ClientboundLoginPackets.GAME_PROFILE, wrapper -> {
+            wrapper.passthrough(Type.UUID);
+            wrapper.passthrough(Type.STRING);
+            int properties = wrapper.passthrough(Type.VAR_INT);
+
+            for (int i = 0; i < properties; i++) {
+                wrapper.passthrough(Type.STRING);
+                wrapper.passthrough(Type.STRING);
+                wrapper.passthrough(Type.OPTIONAL_STRING);
+            }
+
+            wrapper.write(Type.BOOLEAN, strictErrorHandling);
+        });
+        this.cancelServerbound(State.LOGIN, ServerboundLoginPackets.COOKIE_RESPONSE.getId());
+        this.cancelServerbound(ServerboundConfigurationPackets1_20_5.COOKIE_RESPONSE);
+        this.cancelServerbound(ServerboundConfigurationPackets1_20_5.SELECT_KNOWN_PACKS);
+        this.cancelServerbound(ServerboundPackets1_20_5.COOKIE_RESPONSE);
+        this.cancelServerbound(ServerboundPackets1_20_5.DEBUG_SAMPLE_SUBSCRIPTION);
+    }
+
+    private void replaceChatAck(PacketWrapper wrapper, AcknowledgedMessagesStorage storage) throws Exception {
+        wrapper.read(Type.VAR_INT);
+        wrapper.read(Type.ACKNOWLEDGED_BIT_SET);
+        this.writeChatAck(wrapper, storage);
+    }
+
+    private void writeChatAck(PacketWrapper wrapper, AcknowledgedMessagesStorage storage) {
+        wrapper.write(Type.VAR_INT, storage.offset());
+        wrapper.write(Type.ACKNOWLEDGED_BIT_SET, storage.toAck());
+        storage.clearOffset();
+    }
+
+    @Override
+    protected void onMappingDataLoaded() {
+        super.onMappingDataLoaded();
+        EntityTypes1_20_5.initialize(this);
+        Types1_20_5.PARTICLE
+            .filler(this)
+            .reader("block", ParticleType.Readers.BLOCK)
+            .reader("block_marker", ParticleType.Readers.BLOCK)
+            .reader("dust", ParticleType.Readers.DUST)
+            .reader("dust_pillar", ParticleType.Readers.BLOCK)
+            .reader("falling_dust", ParticleType.Readers.BLOCK)
+            .reader("dust_color_transition", ParticleType.Readers.DUST_TRANSITION)
+            .reader("item", ParticleType.Readers.ITEM1_20_5)
+            .reader("vibration", ParticleType.Readers.VIBRATION1_20_3)
+            .reader("sculk_charge", ParticleType.Readers.SCULK_CHARGE)
+            .reader("shriek", ParticleType.Readers.SHRIEK)
+            .reader("entity_effect", ParticleType.Readers.COLOR);
+        Types1_20_5.STRUCTURED_DATA
+            .filler(this)
+            .add(StructuredDataKey.CUSTOM_DATA)
+            .add(StructuredDataKey.MAX_STACK_SIZE)
+            .add(StructuredDataKey.MAX_DAMAGE)
+            .add(StructuredDataKey.DAMAGE)
+            .add(StructuredDataKey.UNBREAKABLE)
+            .add(StructuredDataKey.RARITY)
+            .add(StructuredDataKey.HIDE_TOOLTIP)
+            .add(StructuredDataKey.FOOD)
+            .add(StructuredDataKey.FIRE_RESISTANT)
+            .add(StructuredDataKey.CUSTOM_NAME)
+            .add(StructuredDataKey.LORE)
+            .add(StructuredDataKey.ENCHANTMENTS)
+            .add(StructuredDataKey.CAN_PLACE_ON)
+            .add(StructuredDataKey.CAN_BREAK)
+            .add(StructuredDataKey.ATTRIBUTE_MODIFIERS)
+            .add(StructuredDataKey.CUSTOM_MODEL_DATA)
+            .add(StructuredDataKey.HIDE_ADDITIONAL_TOOLTIP)
+            .add(StructuredDataKey.REPAIR_COST)
+            .add(StructuredDataKey.CREATIVE_SLOT_LOCK)
+            .add(StructuredDataKey.ENCHANTMENT_GLINT_OVERRIDE)
+            .add(StructuredDataKey.INTANGIBLE_PROJECTILE)
+            .add(StructuredDataKey.STORED_ENCHANTMENTS)
+            .add(StructuredDataKey.DYED_COLOR)
+            .add(StructuredDataKey.MAP_COLOR)
+            .add(StructuredDataKey.MAP_ID)
+            .add(StructuredDataKey.MAP_DECORATIONS)
+            .add(StructuredDataKey.MAP_POST_PROCESSING)
+            .add(StructuredDataKey.CHARGED_PROJECTILES)
+            .add(StructuredDataKey.BUNDLE_CONTENTS)
+            .add(StructuredDataKey.POTION_CONTENTS)
+            .add(StructuredDataKey.SUSPICIOUS_STEW_EFFECTS)
+            .add(StructuredDataKey.WRITABLE_BOOK_CONTENT)
+            .add(StructuredDataKey.WRITTEN_BOOK_CONTENT)
+            .add(StructuredDataKey.TRIM)
+            .add(StructuredDataKey.DEBUG_STICK_STATE)
+            .add(StructuredDataKey.ENTITY_DATA)
+            .add(StructuredDataKey.BUCKET_ENTITY_DATA)
+            .add(StructuredDataKey.BLOCK_ENTITY_DATA)
+            .add(StructuredDataKey.INSTRUMENT)
+            .add(StructuredDataKey.RECIPES)
+            .add(StructuredDataKey.LODESTONE_TRACKER)
+            .add(StructuredDataKey.FIREWORK_EXPLOSION)
+            .add(StructuredDataKey.FIREWORKS)
+            .add(StructuredDataKey.PROFILE)
+            .add(StructuredDataKey.NOTE_BLOCK_SOUND)
+            .add(StructuredDataKey.BANNER_PATTERNS)
+            .add(StructuredDataKey.BASE_COLOR)
+            .add(StructuredDataKey.POT_DECORATIONS)
+            .add(StructuredDataKey.CONTAINER)
+            .add(StructuredDataKey.BLOCK_STATE)
+            .add(StructuredDataKey.BEES)
+            .add(StructuredDataKey.LOCK)
+            .add(StructuredDataKey.CONTAINER_LOOT)
+            .add(StructuredDataKey.TOOL)
+            .add(StructuredDataKey.ITEM_NAME)
+            .add(StructuredDataKey.OMINOUS_BOTTLE_AMPLIFIER);
+        this.tagRewriter.addTag(RegistryType.ITEM, "minecraft:dyeable", 853, 854, 855, 856, 1120);
+    }
+
+    @Override
+    public void init(UserConnection connection) {
+        this.addEntityTracker(connection, new EntityTrackerBase(connection, EntityTypes1_20_5.PLAYER));
+        connection.put(new AcknowledgedMessagesStorage());
+    }
+
+    public MappingData getMappingData() {
+        return MAPPINGS;
+    }
+
+    public EntityPacketRewriter1_20_5 getEntityRewriter() {
+        return this.entityRewriter;
+    }
+
+    public BlockItemPacketRewriter1_20_5 getItemRewriter() {
+        return this.itemRewriter;
+    }
+
+    public TagRewriter<ClientboundPacket1_20_3> getTagRewriter() {
+        return this.tagRewriter;
+    }
+
+    public ComponentRewriter<ClientboundPacket1_20_3> getComponentRewriter() {
+        return this.componentRewriter;
+    }
+
+    @Override
+    protected PacketTypesProvider<ClientboundPacket1_20_3, ClientboundPacket1_20_5, ServerboundPacket1_20_3, ServerboundPacket1_20_5> createPacketTypesProvider() {
+        return new SimplePacketTypesProvider<>(
+            ProtocolUtil.packetTypeMap(
+                this.unmappedClientboundPacketType,
+                ClientboundPackets1_20_3.class,
+                ClientboundConfigurationPackets1_20_3.class
+            ),
+            ProtocolUtil.packetTypeMap(
+                this.mappedClientboundPacketType,
+                ClientboundPackets1_20_5.class,
+                ClientboundConfigurationPackets1_20_5.class
+            ),
+            ProtocolUtil.packetTypeMap(
+                this.mappedServerboundPacketType,
+                ServerboundPackets1_20_3.class,
+                ServerboundConfigurationPackets1_20_2.class
+            ),
+            ProtocolUtil.packetTypeMap(
+                this.unmappedServerboundPacketType,
+                ServerboundPackets1_20_5.class,
+                ServerboundConfigurationPackets1_20_5.class
+            )
+        );
+    }
+}

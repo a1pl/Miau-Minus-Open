@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "id": "viaversion",
+  "name": "ViaVersion",
+  "version": "4.10.0",
+  "description": "Allow newer clients to join older server versions.",
+  "license": "GPL-3.0",
+  "contact": {
+    "homepage": "https://viaversion.com/",
+    "issues": "https://github.com/ViaVersion/ViaVersion/issues",
+    "sources": "https://github.com/ViaVersion/ViaVersion"
+  },
+  "icon": "assets/viaversion/textures/squarelogo.png",
+  "environment": "*",
+  "authors": [
+    "_MylesC",
+    "creeper123123321",
+    "Gerrygames",
+    "kennytv",
+    "Matsv",
+    "EnZaXD",
+    "RK_01"
+  ],
+  "depends": {
+    "fabricloader": ">=0.14.0",
+    "viafabric": ">=0.4.10"
+  },
+  "custom": {
+    "modmenu:api": true,
+    "modmenu": {
+      "badges": [ "library" ],
+      "parent": "viafabric"
+    }
+  }
+}
